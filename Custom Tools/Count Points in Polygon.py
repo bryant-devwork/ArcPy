@@ -8,6 +8,8 @@ import arcpy
 ##
 ########################################################################################
 
+## Watch the video here: https://youtu.be/SQgEUi94XWs
+
 ## 🤗 Support content creation 👉 https://buymeacoffee.com/glenbambrick
 
 ########################################################################################
@@ -29,11 +31,11 @@ count_field = arcpy.GetParameterAsText(3)
 ## COUNT POINTS IN POLYGON #############################################################
 
 arcpy.management.CalculateField(
-    in_table=polygon_features,
-    field=count_field,
-    expression=f"""var points = Filter(FeatureSetByName($datastore, "{point_features}", ["{where_clause.split(" ")[0]}"], false), "{where_clause}")
+    in_table = polygon_features,
+    field = count_field,
+    expression = f"""var points = Filter(FeatureSetByName($datastore, "{point_features}", ["{where_clause.split(" ")[0]}"], false), "{where_clause}")
 return Count(Intersects(points, $feature))""",
-    expression_type="ARCADE"
+    expression_type = "ARCADE"
 )
 
 ########################################################################################
