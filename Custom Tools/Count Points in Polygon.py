@@ -21,7 +21,7 @@ point_features = arcpy.GetParameterAsText(0)
 ## optional where clause
 where_clause = arcpy.GetParameterAsText(1)
 
-## the polygon featyre classes to count the number of points
+## the polygon feature classes to count the number of points
 polygon_features = arcpy.GetParameterAsText(2)
 
 ## the field from the polygon_features to use for the count attribute
