@@ -2,7 +2,7 @@ import arcpy
 
 ########################################################################################
 ## Esri Documentation:
-##  https://doc.esri.com/en/arcgis-pro/latest/tool-reference/data-management/split-line-at-point.htm
+##  https://doc.esri.com/en/arcgis-pro/latest/tool-reference/data-management/split-line-at-point.html?tabs=python
 ##  https://doc.esri.com/en/arcgis-pro/latest/arcpy/functions/getparameterastext.html
 ##  https://doc.esri.com/en/arcgis-pro/latest/arcpy/data-access/describe.html
 ##  https://doc.esri.com/en/arcgis-pro/latest/arcpy/functions/listfields.html
@@ -28,10 +28,10 @@ import arcpy
 ## USER INPUTS #########################################################################
 
 ## Linear feature class to split
-in_features = arcpy.GetParameterAsText(0)
+in_features = arcpy.GetParameter(0)
 
 ## the point feature class to split the lines by
-point_features = arcpy.GetParameterAsText(1)
+point_features = arcpy.GetParameter(1)
 
 ## output workspace; gdb or folder for shapefile
 out_feature_class = arcpy.GetParameterAsText(2)
@@ -75,7 +75,7 @@ in_fld_names.insert(0, oid_fld)
 ## it will be a list of lists containing attributes and geometry
 segments_lst = []
 
-## dictionary to hold the key: OID, value: vertice points for each line.
+## dictionary to hold the key: OID, value: vertex points for each line.
 points_dict = {}
 
 ########################################################################################
@@ -121,14 +121,21 @@ with arcpy.da.SearchCursor(
 ## SPLIT LINES #########################################################################
 
 ## search through each linear record
-with arcpy.da.SearchCursor(in_features, in_fld_names) as ln_cursor:
+with arcpy.da.SearchCursor(
+    in_table = in_features,
+    field_names = in_fld_names
+) as ln_cursor:
     for ln in ln_cursor:
 
         ## get the start point of the line
         first_ln_xy = (ln[-1].firstPoint.X, ln[-1].firstPoint.Y)
 
         ## some lines may not have a closest point
+        ## this will cause a KeyError when looking in the points_dict
         try:
+            ## get the points list for the current line from the points_dict.
+            ## at this point you count get a KeyError if there is no matching OID in
+            ## the points_dict.
             pt_sel = points_dict[ln[0]]
 
             ## will hold a list of distances points are along a line to help
