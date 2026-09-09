@@ -12,6 +12,7 @@ import arcpy
 ##         to automatically backup with a datestamp.
 ##         Expects text fields that do not contain NULL values.
 ##         Modifies the input dataset.
+##         Does not sum/average other fields.
 ##
 ########################################################################################
 
